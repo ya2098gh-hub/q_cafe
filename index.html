@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q Cafe — إسبريسو أكتر.. ديبريسو أقل | المنصورة</title>
+  <meta name="description" content="كافيه Q في حي الجامعة - الطريق الدائري - قبل كوبري الجامعة، المنصورة. قهوة، فرابيه، وافل، وأجواء رايقة ومريحة كل يوم." />
+  <meta name="keywords" content="Q Cafe, كافيه المنصورة, حي الجامعة, لوتس فرابيه, وافل بستاشيو, قهوة المنصورة" />
+
+  <!-- بيانات المشاركة Open Graph -->
+  <meta property="og:title" content="Q Cafe — إسبريسو أكتر.. ديبريسو أقل" />
+  <meta property="og:description" content="مخرجك اليومي اللي معمول بمزاج. حي الجامعة، الطريق الدائري، المنصورة." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" />
+
+  <!-- أيقونة المتصفح المخصصة (حرف Q بلون ذهبي شمبانيا على خلفية إسبريسو داكنة) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2317120F'/%3E%3Ccircle cx='32' cy='31' r='16' fill='none' stroke='%23C6A46A' stroke-width='3.5'/%3E%3Cpath d='M36 35 L46 46' stroke='%23C6A46A' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+  <!-- خطوط جوجل: Cairo, Tajawal, Cormorant Garamond, Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            espresso: '#17120F',
+            chocolate: '#2B1D17',
+            bronze: '#A77B4F',
+            gold: '#C6A46A',
+            cream: '#F3EBDD',
+            softwhite: '#FAF8F4',
+          },
+          fontFamily: {
+            serif: ['"Cairo"', '"Tajawal"', '"Cormorant Garamond"', 'serif'],
+            display: ['"Cairo"', '"Tajawal"', '"Playfair Display"', 'serif'],
+            sans: ['"Cairo"', '"Tajawal"', '"Plus Jakarta Sans"', 'sans-serif'],
+            latin: ['"Cormorant Garamond"', '"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          boxShadow: {
+            luxury: '0 24px 60px -15px rgba(23, 18, 15, 0.35)',
+            goldglow: '0 0 30px rgba(198, 164, 106, 0.22)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- مكتبة GSAP و ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- أيقونات Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg-espresso: #17120F;
+      --bg-chocolate: #2B1D17;
+      --accent-bronze: #A77B4F;
+      --accent-gold: #C6A46A;
+      --surface-cream: #F3EBDD;
+      --surface-white: #FAF8F4;
+    }
+
+    body {
+      background-color: #FAF8F4;
+      color: #17120F;
+      font-family: 'Cairo', 'Tajawal', 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* إضاءة ذهبية ناعمة */
+    .ambient-gold-orb {
+      background: radial-gradient(circle at center, rgba(198, 164, 106, 0.16) 0%, rgba(167, 123, 79, 0.05) 45%, transparent 72%);
+      pointer-events: none;
+    }
+
+    .hero-vignette {
+      background: linear-gradient(
+        180deg,
+        rgba(23, 18, 15, 0.80) 0%,
+        rgba(23, 18, 15, 0.54) 48%,
+        rgba(23, 18, 15, 0.92) 100%
+      );
+    }
+
+    /* شريط التمرير */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F3EBDD;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A77B4F;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C6A46A;
+    }
+
+    /* تكبير صورة المنتج عند المرور */
+    .product-card:hover .product-img {
+      transform: scale(1.06);
+    }
+    .product-img {
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* احترام تفضيل تقليل الحركة */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-softwhite text-espresso antialiased selection:bg-gold/30 selection:text-espresso">
+
+  <!-- ===================================================================== -->
+  <!-- 1. شريط التنقل العلوي الثابت وقائمة الموبايل الجانبية                -->
+  <!-- ===================================================================== -->
+  <header id="navbar" class="sticky top-0 z-40 w-full bg-espresso/95 backdrop-blur-md border-b border-gold/15 text-softwhite transition-all duration-300">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
+      <!-- شعار الكافيه -->
+      <a href="#home" class="flex items-center gap-3 group focus:outline-none">
+        <svg width="38" height="38" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+          <rect x="4" y="4" width="92" height="92" rx="24" stroke="#C6A46A" stroke-opacity="0.45" stroke-width="2" />
+          <circle cx="48" cy="48" r="22" stroke="#C6A46A" stroke-width="5" />
+          <path d="M55 55L70 70" stroke="#C6A46A" stroke-width="5" stroke-linecap="round" />
+        </svg>
+        <div class="leading-tight">
+          <span class="block font-latin text-xl sm:text-2xl font-semibold tracking-[0.14em] text-softwhite group-hover:text-gold transition">Q CAFE</span>
+          <span class="block text-[11px] text-gold/85">المنصورة • حي الجامعة</span>
+        </div>
+      </a>
+
+      <!-- روابط التنقل للشاشات الكبيرة -->
+      <nav aria-label="التنقل الرئيسي" class="hidden lg:flex items-center gap-6 text-sm font-medium text-cream/85">
+        <a href="#menu" class="hover:text-gold transition py-1">المنيو</a>
+        <a href="#spotlight" class="hover:text-gold transition py-1">الأكثر طلباً</a>
+        <a href="#offers" class="hover:text-gold transition py-1">عروضنا</a>
+        <a href="#about" class="hover:text-gold transition py-1">حكايتنا والمواعيد</a>
+        <a href="#gallery" class="hover:text-gold transition py-1">الجاليري</a>
+        <a href="#reservations" class="hover:text-gold transition py-1">احجز ترابيزة</a>
+        <a href="#location" class="hover:text-gold transition py-1">العنوان</a>
+      </nav>
+
+      <!-- أزرار التحكم السريعة -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- زر تبديل الاتجاه RTL / LTR -->
+        <button id="dir-toggle-btn" type="button" title="تبديل اتجاه الصفحة RTL / LTR" class="rounded-full border border-gold/30 px-3 py-1.5 text-xs font-semibold text-cream hover:border-gold hover:text-gold transition">
+          RTL / LTR
+        </button>
+
+        <!-- زر QR ومشاركة المنيو -->
+        <button id="open-qr-modal-btn" type="button" aria-label="كود QR ومشاركة المنيو" title="كود QR ومشاركة المنيو" class="hidden sm:inline-flex items-center justify-center rounded-full border border-gold/25 p-2.5 text-cream/85 hover:border-gold hover:text-gold transition">
+          <i data-lucide="qr-code" class="w-4 h-4"></i>
+        </button>
+
+        <!-- زر المفضلة -->
+        <button id="favorites-filter-btn" type="button" aria-label="المفضلة" title="المفضلة" class="relative inline-flex items-center justify-center rounded-full border border-gold/25 p-2.5 text-cream/85 hover:border-gold hover:text-gold transition">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          <span id="fav-badge" class="absolute -top-1 -start-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-bronze px-1 text-[10px] font-bold text-softwhite">0</span>
+        </button>
+
+        <!-- زر فتح السلة -->
+        <button id="open-cart-btn" type="button" aria-label="فتح سلة الطلبات" class="relative inline-flex items-center gap-2 rounded-full bg-gold px-4 py-2 text-xs sm:text-sm font-bold text-espresso shadow-goldglow hover:bg-cream transition">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">اطلب دلوقتي</span>
+          <span id="cart-badge" class="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-espresso px-1.5 text-xs font-bold text-gold">0</span>
+        </button>
+
+        <!-- زر قائمة الموبايل -->
+        <button id="mobile-menu-open-btn" type="button" aria-label="فتح القائمة" class="lg:hidden inline-flex items-center justify-center rounded-full border border-gold/30 p-2.5 text-cream hover:border-gold hover:text-gold transition">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- قائمة الموبايل الجانبية -->
+  <div id="mobile-drawer" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="قائمة الموبايل">
+    <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-espresso/75 backdrop-blur-xs"></div>
+    <aside class="fixed top-0 bottom-0 start-0 w-80 max-w-[85vw] bg-espresso text-cream border-e border-gold/20 p-6 flex flex-col justify-between overflow-y-auto z-10">
+      <div>
+        <div class="flex items-center justify-between pb-5 border-b border-gold/15">
+          <span class="font-latin text-2xl font-semibold tracking-[0.14em] text-gold">Q CAFE</span>
+          <button id="mobile-menu-close-btn" type="button" aria-label="إغلاق القائمة" class="rounded-full p-2 text-cream/80 hover:bg-chocolate hover:text-gold transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <nav class="mt-6 flex flex-col gap-2.5 text-base font-medium">
+          <a href="#home" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">الرئيسية</a>
+          <a href="#menu" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">المنيو التفاعلي</a>
+          <a href="#spotlight" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">المشروبات المميزة والوافل</a>
+          <a href="#offers" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">العروض والمميزات</a>
+          <a href="#about" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">عن Q Cafe ومواعيد العمل</a>
+          <a href="#gallery" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">الجاليري</a>
+          <a href="#reservations" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">حجز ترابيزة</a>
+          <a href="#location" class="mobile-nav-link rounded-xl px-3 py-2.5 hover:bg-chocolate hover:text-gold transition">العنوان والخريطة</a>
+        </nav>
+      </div>
+      <div class="pt-6 border-t border-gold/15 space-y-3">
+        <button id="mobile-qr-btn" type="button" class="w-full flex items-center justify-center gap-2 rounded-full border border-gold/35 py-2.5 text-xs font-semibold text-cream hover:border-gold hover:text-gold transition">
+          <i data-lucide="qr-code" class="w-4 h-4"></i> كود QR ومشاركة المنيو
+        </button>
+        <a href="https://wa.me/201007450124" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 rounded-full bg-gold py-2.5 text-xs font-bold text-espresso hover:bg-cream transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i> تواصل معنا واتساب
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 3. الواجهة الرئيسية السينمائية (HERO)                                 -->
+  <!-- ===================================================================== -->
+  <section id="home" class="relative min-h-[88vh] flex items-center justify-center bg-espresso text-softwhite overflow-hidden">
+    <div id="hero-parallax-bg" class="absolute inset-0 scale-105">
+      <img
+        src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=85"
+        alt="أجواء Q Cafe والقهوة المحضرة بعناية في المنصورة"
+        class="h-full w-full object-cover object-center"
+        onerror="this.src='https://placehold.co/1600x900/17120F/C6A46A?text=Q+CAFE+%7C+MANSOURA'"
+      />
+      <div class="hero-vignette absolute inset-0"></div>
+      <div class="ambient-gold-orb absolute -top-24 -end-24 w-[480px] h-[480px] rounded-full"></div>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-5xl px-5 sm:px-8 py-20 text-center">
+      <div class="hero-stagger inline-flex items-center gap-2 rounded-full border border-gold/40 bg-espresso/75 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-gold mb-6">
+        <span>حي الجامعة • الطريق الدائري • المنصورة</span>
+      </div>
+
+      <h1 class="hero-stagger font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-softwhite leading-[1.15]">
+        إسبريسو أكتر.<br />
+        <span class="text-gold">ديبريسو أقل.</span>
+      </h1>
+
+      <p class="hero-stagger mt-5 max-w-2xl mx-auto text-base sm:text-xl text-cream/90 font-normal leading-relaxed">
+        مخرجك اليومي اللي معمول بمزاج — قهوة، فرابيه، ووافل في قعدة تروق البال.
+      </p>
+
+      <p class="hero-stagger mt-2 text-xs sm:text-sm text-gold/85 font-latin" dir="ltr">
+        More espresso Less depresso ❤
+      </p>
+
+      <!-- أزرار الدعوة لاتخاذ إجراء -->
+      <div class="hero-stagger mt-9 flex flex-wrap items-center justify-center gap-4">
+        <a href="#menu" data-magnetic class="inline-flex items-center gap-2.5 rounded-full bg-gold px-7 py-3.5 text-sm font-bold text-espresso shadow-goldglow hover:bg-cream transition duration-300">
+          <span>استكشف المنيو</span>
+          <i data-lucide="arrow-down-left" class="w-4 h-4"></i>
+        </a>
+        <button id="hero-order-now-btn" type="button" data-magnetic class="inline-flex items-center gap-2.5 rounded-full border border-gold/60 bg-espresso/70 backdrop-blur-xs px-7 py-3.5 text-sm font-bold text-softwhite hover:bg-chocolate hover:border-gold transition duration-300">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-gold"></i>
+          <span>اطلب دلوقتي</span>
+        </button>
+        <a href="#reservations" class="inline-flex items-center gap-2 rounded-full border border-cream/25 px-6 py-3.5 text-sm font-semibold text-cream/90 hover:border-gold hover:text-gold transition duration-300">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          <span>اطلب حجز ترابيزة</span>
+        </a>
+      </div>
+
+      <!-- مؤشر التمرير -->
+      <div class="hero-stagger mt-14 flex flex-col items-center justify-center gap-2 text-cream/70">
+        <span class="text-xs tracking-wider">انزل لتحت واكتشف أكتر</span>
+        <div class="h-9 w-[1px] bg-gradient-to-b from-gold to-transparent animate-pulse"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 4. العروض والمميزات                                                  -->
+  <!-- ===================================================================== -->
+  <section id="offers" class="bg-chocolate text-cream border-y border-gold/20 py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <span class="text-xs font-bold text-gold">تشكيلة مختارة</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-softwhite mt-1">عروض ومميزات Q Cafe</h2>
+        </div>
+        <span class="inline-flex items-center gap-1.5 self-start md:self-auto rounded-full bg-espresso/80 border border-gold/30 px-3.5 py-1 text-xs text-gold">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>عروض تجريبية قابلة للتعديل لحين اعتماد العروض الرسمية</span>
+        </span>
+      </div>
+      <div id="offers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- يتم تعبئته من Q_CAFE_CONFIG.promotions -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 5. أبرز الأصناف المميزة (لوتس فرابيه ووافل بستاشيو)                 -->
+  <!-- ===================================================================== -->
+  <section id="spotlight" class="py-16 sm:py-24 bg-cream/60">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-12 reveal-up">
+        <span class="text-xs font-bold text-bronze">أجمد حاجات عندنا</span>
+        <h2 class="mt-2 font-serif text-3xl sm:text-5xl font-bold text-espresso">المشروبات المميزة والوافل</h2>
+        <p class="mt-3 text-sm sm:text-base text-espresso/75 leading-relaxed">
+          أصناف مختارة من منيو Q Cafe — مناسبة للقعدة الهادية، المذاكرة، أو تحلية آخر الليل في المنصورة.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- لوتس فرابيه -->
+        <article class="reveal-up group relative overflow-hidden rounded-3xl bg-espresso text-softwhite shadow-luxury grid grid-cols-1 sm:grid-cols-12">
+          <div class="sm:col-span-5 overflow-hidden min-h-[240px]">
+            <img
+              src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80"
+              alt="لوتس فرابيه - صورة توضيحية"
+              loading="lazy"
+              class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
+              onerror="this.src='https://placehold.co/600x700/2B1D17/C6A46A?text=Lotus+Frappe'"
+            />
+          </div>
+          <div class="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-semibold text-gold">مشروبات باردة وفرابيه</span>
+                <span class="rounded-full bg-gold/15 border border-gold/30 px-2.5 py-0.5 text-[11px] text-gold">سعر تجريبي</span>
+              </div>
+              <h3 class="mt-2 font-serif text-2xl sm:text-3xl font-bold text-softwhite">لوتس فرابيه (Lotus Frappe)</h3>
+              <p class="mt-2.5 text-sm text-cream/80 leading-relaxed">
+                فرابيه بارد ومضروب بمزاج مع نكهة بسكويت اللوتس المكرمل وطبقة كريمة ناعمة. (بيانات تجريبية قابلة للتعديل).
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gold/15 flex items-center justify-between gap-4">
+              <div>
+                <span class="block text-xs text-cream/60">يبدأ من</span>
+                <span class="font-serif text-2xl text-gold font-bold">115 ج.م</span>
+              </div>
+              <button type="button" onclick="quickAddById('lotus-frappe')" class="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-xs font-bold text-espresso hover:bg-cream transition">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>أضف للسلة</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- وافل بستاشيو -->
+        <article class="reveal-up group relative overflow-hidden rounded-3xl bg-chocolate text-softwhite shadow-luxury grid grid-cols-1 sm:grid-cols-12">
+          <div class="sm:col-span-5 overflow-hidden min-h-[240px]">
+            <img
+              src="https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=900&q=80"
+              alt="وافل بستاشيو - صورة توضيحية"
+              loading="lazy"
+              class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
+              onerror="this.src='https://placehold.co/600x700/17120F/C6A46A?text=Pistachio+Waffle'"
+            />
+          </div>
+          <div class="sm:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-semibold text-gold">وافل وحلويات</span>
+                <span class="rounded-full bg-gold/15 border border-gold/30 px-2.5 py-0.5 text-[11px] text-gold">سعر تجريبي</span>
+              </div>
+              <h3 class="mt-2 font-serif text-2xl sm:text-3xl font-bold text-softwhite">وافل بستاشيو (Pistachio Waffle)</h3>
+              <p class="mt-2.5 text-sm text-cream/80 leading-relaxed">
+                وافل مقرمش من بره وطري من جوه متغطي بكريمة الفستق الغنية والمكسرات. (بيانات تجريبية قابلة للتعديل).
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gold/15 flex items-center justify-between gap-4">
+              <div>
+                <span class="block text-xs text-cream/60">يبدأ من</span>
+                <span class="font-serif text-2xl text-gold font-bold">130 ج.م</span>
+              </div>
+              <button type="button" onclick="quickAddById('pistachio-waffle')" class="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-xs font-bold text-espresso hover:bg-cream transition">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>أضف للسلة</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 6. المنيو التفاعلي                                                    -->
+  <!-- ===================================================================== -->
+  <section id="menu" class="py-16 sm:py-24 bg-softwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div class="max-w-2xl">
+          <span class="text-xs font-bold text-bronze">اختار على مزاجك</span>
+          <h2 class="mt-2 font-serif text-3xl sm:text-5xl font-bold text-espresso">المنيو التفاعلي</h2>
+          <p class="mt-3 text-sm sm:text-base text-espresso/75">
+            تصفح الإسبريسو والقهوة السخنة، القهوة المثلجة، الفرابيه، المشروبات المميزة، الفريش، الحلويات، الوافل القابل للتخصيص، والكومبو.
+          </p>
+        </div>
+        <div class="rounded-2xl bg-cream border border-bronze/25 px-4 py-3 text-xs text-espresso/80 max-w-md leading-relaxed">
+          <strong class="text-espresso font-bold">بيانات تجريبية قابلة للتعديل:</strong> الأسعار (بالجنيه المصري) وبعض تفاصيل الأصناف نماذج توضيحية لحين إدخال المنيو والأسعار الرسمية للكافيه.
+        </div>
+      </div>
+
+      <!-- شريط البحث وفلتر المفضلة -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+        <div class="relative flex-1 max-w-md">
+          <i data-lucide="search" class="w-4 h-4 text-bronze absolute start-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input
+            id="menu-search-input"
+            type="search"
+            placeholder="دوّر على إسبريسو، لوتس فرابيه، وافل بستاشيو..."
+            aria-label="ابحث في المنيو"
+            class="w-full rounded-full border border-bronze/30 bg-white ps-11 pe-4 py-2.5 text-sm text-espresso placeholder:text-espresso/45 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/25 transition"
+          />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="toggle-only-favorites" type="button" class="inline-flex items-center gap-2 rounded-full border border-bronze/30 bg-white px-4 py-2.5 text-xs font-bold text-espresso hover:border-gold transition">
+            <i data-lucide="heart" class="w-4 h-4 text-bronze"></i>
+            <span>المفضلة فقط</span>
+          </button>
+          <button id="reset-filters-btn" type="button" class="rounded-full px-3.5 py-2.5 text-xs font-semibold text-espresso/65 hover:text-espresso transition">
+            إعادة ضبط
+          </button>
+        </div>
+      </div>
+
+      <!-- تبويبات الأقسام -->
+      <div id="category-tabs" role="tablist" aria-label="أقسام المنيو" class="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b border-espresso/10">
+        <!-- يتم تعبئته ديناميكياً -->
+      </div>
+
+      <!-- شبكة المنتجات -->
+      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
+        <!-- يتم تعبئته ديناميكياً -->
+      </div>
+
+      <!-- حالة عدم وجود نتائج -->
+      <div id="menu-empty-state" class="hidden rounded-3xl border border-dashed border-bronze/35 bg-cream/60 p-12 text-center mt-6">
+        <i data-lucide="coffee" class="w-10 h-10 text-bronze mx-auto mb-3"></i>
+        <h3 class="font-serif text-2xl font-bold text-espresso">مفيش صنف مطابق لبحثك</h3>
+        <p class="mt-1 text-sm text-espresso/70">جرّب تغيّر كلمة البحث أو تختار قسم تاني من المنيو.</p>
+        <button type="button" onclick="resetMenuFilters()" class="mt-5 rounded-full bg-espresso px-5 py-2.5 text-xs font-bold text-gold hover:bg-chocolate transition">
+          عرض كل المنيو
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 7. حكاية Q CAFE ومواعيد العمل                                        -->
+  <!-- ===================================================================== -->
+  <section id="about" class="py-16 sm:py-24 bg-cream">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+        <div class="lg:col-span-7 reveal-up">
+          <span class="text-xs font-bold text-bronze">عن Q Cafe</span>
+          <h2 class="mt-2 font-serif text-3xl sm:text-5xl font-bold text-espresso leading-tight">
+            ثقافة قهوة عصرية وأجواء مريحة في قلب المنصورة
+          </h2>
+          <p class="mt-5 text-base text-espresso/80 leading-relaxed">
+            موجودين في <strong>حي الجامعة، الطريق الدائري، قبل كوبري الجامعة، ميت خميس وكفر الموجي، المنصورة، محافظة الدقهلية، مصر</strong>. في Q Cafe بنجمع بين الضيافة الدافئة والقهوة المظبوطة والوافل والحلويات تحت روح شعارنا <em>«More espresso Less depresso ❤»</em>.
+          </p>
+          <p class="mt-4 text-sm sm:text-base text-espresso/75 leading-relaxed">
+            سواء بتعدي علينا في نص اليوم، أو بتذاكر وتشتغل بهدوء، أو خارج مع صحابك بالليل، هتلاقي مكان يروقك ويظبط مودك.
+          </p>
+
+          <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="rounded-2xl bg-softwhite p-5 border border-bronze/15">
+              <span class="font-serif text-xl font-bold text-bronze">إسبريسو وقهوة</span>
+              <p class="mt-1 text-xs text-espresso/70 leading-relaxed">مشروبات ساخنة ومثلجة تحضر يومياً بمزاج.</p>
+            </div>
+            <div class="rounded-2xl bg-softwhite p-5 border border-bronze/15">
+              <span class="font-serif text-xl font-bold text-bronze">فرابيه ومميزة</span>
+              <p class="mt-1 text-xs text-espresso/70 leading-relaxed">خلطات باردة ونكهات لوتس ومميزة تناسب كل الأوقات.</p>
+            </div>
+            <div class="rounded-2xl bg-softwhite p-5 border border-bronze/15">
+              <span class="font-serif text-xl font-bold text-bronze">وافل وحلويات</span>
+              <p class="mt-1 text-xs text-espresso/70 leading-relaxed">وافل بستاشيو ووافل قابل للتخصيص حسب ذوقك.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- جدول مواعيد العمل -->
+        <div class="lg:col-span-5 reveal-up rounded-3xl bg-espresso text-softwhite p-6 sm:p-8 shadow-luxury border border-gold/20">
+          <div class="flex items-center justify-between gap-2 pb-4 border-b border-gold/15">
+            <div>
+              <span class="text-xs font-semibold text-gold">المواعيد المعلنة</span>
+              <h3 class="font-serif text-2xl sm:text-3xl font-bold text-softwhite">مواعيد العمل</h3>
+            </div>
+            <i data-lucide="clock" class="w-6 h-6 text-gold"></i>
+          </div>
+
+          <ul id="hours-list" class="mt-5 divide-y divide-gold/10 text-sm">
+            <!-- يتم تعبئته من Q_CAFE_CONFIG.hours -->
+          </ul>
+
+          <p class="mt-5 rounded-xl bg-chocolate/90 border border-gold/15 p-3.5 text-xs text-cream/75 leading-relaxed">
+            <strong>تنويه:</strong> هذه المواعيد هي مواعيد العمل المعلنة للجمهور وليست تأكيداً فورياً للحالة المباشرة في كل لحظة؛ يُفضل التأكيد عبر واتساب عند الحاجة.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 8. الجاليري وآراء الضيوف                                             -->
+  <!-- ===================================================================== -->
+  <section id="gallery" class="py-16 sm:py-24 bg-softwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+        <div>
+          <span class="text-xs font-bold text-bronze">لقطات وأجواء</span>
+          <h2 class="mt-2 font-serif text-3xl sm:text-5xl font-bold text-espresso">جاليري Q Cafe</h2>
+        </div>
+        <span class="text-xs text-espresso/65 bg-cream px-3.5 py-1.5 rounded-full border border-bronze/20">
+          صور توضيحية مؤقتة لحين إضافة الصور الرسمية للكافيه
+        </span>
+      </div>
+
+      <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        <!-- يتم تعبئته ديناميكياً -->
+      </div>
+
+      <!-- ملاحظة الشفافية حول التقييمات -->
+      <div class="mt-12 rounded-3xl bg-cream border border-bronze/20 p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-bronze">آراء وتقييمات الزوار</span>
+            <h3 class="font-serif text-2xl font-bold text-espresso mt-1">معلومات موثقة وشفافة</h3>
+            <p class="mt-2 text-sm text-espresso/75 max-w-2xl leading-relaxed">
+              حرصاً على الدقة والشفافية، لا يتم عرض أي تقييمات أو أرقام نجوم مختلقة هنا. يمكنك الاطلاع على صفحة المكان والتعليقات مباشرة عبر خرائط جوجل.
+            </p>
+          </div>
+          <a href="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-3 text-xs font-bold text-gold hover:bg-chocolate transition shrink-0">
+            <span>فتح على خرائط جوجل</span>
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 9. نظام طلبات الحجز (RESERVATION REQUEST)                            -->
+  <!-- ===================================================================== -->
+  <section id="reservations" class="py-16 sm:py-24 bg-chocolate text-softwhite">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-gold">طلبات الحجز</span>
+        <h2 class="mt-2 font-serif text-3xl sm:text-5xl font-bold text-softwhite">احجز ترابيزتك</h2>
+        <p class="mt-3 text-sm sm:text-base text-cream/80">
+          جهّز طلب الحجز وابعته مباشرة للكافيه على واتساب (<strong dir="ltr">+201007450124</strong>).
+        </p>
+      </div>
+
+      <form id="reservation-form" class="rounded-3xl bg-espresso border border-gold/25 p-6 sm:p-10 shadow-luxury space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="res-name" class="block text-xs font-bold text-gold mb-2">الاسم بالكامل *</label>
+            <input id="res-name" type="text" required placeholder="اكتب اسمك" class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite placeholder:text-cream/40 focus:border-gold focus:outline-none" />
+          </div>
+          <div>
+            <label for="res-phone" class="block text-xs font-bold text-gold mb-2">رقم الواتساب *</label>
+            <input id="res-phone" type="tel" required placeholder="010XXXXXXXX" class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite placeholder:text-cream/40 focus:border-gold focus:outline-none" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label for="res-date" class="block text-xs font-bold text-gold mb-2">تاريخ الحجز *</label>
+            <input id="res-date" type="date" required class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite focus:border-gold focus:outline-none" />
+          </div>
+          <div>
+            <label for="res-time" class="block text-xs font-bold text-gold mb-2">الوقت المفضل *</label>
+            <input id="res-time" type="time" required class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite focus:border-gold focus:outline-none" />
+          </div>
+          <div>
+            <label for="res-guests" class="block text-xs font-bold text-gold mb-2">عدد الأفراد *</label>
+            <select id="res-guests" class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite focus:border-gold focus:outline-none">
+              <option value="فرد واحد">فرد واحد</option>
+              <option value="فردين" selected>فردين</option>
+              <option value="3 أفراد">3 أفراد</option>
+              <option value="4 أفراد">4 أفراد</option>
+              <option value="5-6 أفراد">5–6 أفراد</option>
+              <option value="أكتر من 6 أفراد (مجموعة)">أكتر من 6 أفراد (مجموعة)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="res-seating" class="block text-xs font-bold text-gold mb-2">تفضيل القعدة</label>
+          <select id="res-seating" class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite focus:border-gold focus:outline-none">
+            <option value="بدون تفضيل محدد">بدون تفضيل محدد</option>
+            <option value="قعدة مريحة / بوث">قعدة مريحة / بوث</option>
+            <option value="مكان هادي للمذاكرة أو اللابتوب">مكان هادي للمذاكرة أو اللابتوب</option>
+            <option value="قريب من الشباك / إطلالة الدائري">قريب من الشباك / إطلالة الدائري</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="res-notes" class="block text-xs font-bold text-gold mb-2">ملاحظات إضافية</label>
+          <textarea id="res-notes" rows="3" placeholder="مناسبة خاصة، طلبات إضافية، أو ميعاد الوصول..." class="w-full rounded-xl border border-gold/25 bg-chocolate/70 px-4 py-3 text-sm text-softwhite placeholder:text-cream/40 focus:border-gold focus:outline-none"></textarea>
+        </div>
+
+        <div class="rounded-2xl bg-chocolate/80 border border-gold/20 p-4 text-xs text-cream/80 flex items-start gap-3">
+          <i data-lucide="info" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>
+          <span>
+            <strong>مهم:</strong> إرسال النموذج يفتح واتساب برسالة <strong>طلب حجز</strong>، ولا يُعد حجزاً مؤكداً تلقائياً إلا بعد تأكيد الكافيه لتوفر الترابيزة.
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+          <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-gold px-8 py-3.5 text-sm font-bold text-espresso shadow-goldglow hover:bg-cream transition">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>إرسال طلب الحجز عبر واتساب</span>
+          </button>
+          <span id="res-status-msg" class="text-xs text-gold"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 10. العنوان وخرائط جوجل                                              -->
+  <!-- ===================================================================== -->
+  <section id="location" class="py-16 sm:py-24 bg-softwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-5 space-y-5">
+          <span class="text-xs font-bold text-bronze">مكاننا في المنصورة</span>
+          <h2 class="font-serif text-3xl sm:text-5xl font-bold text-espresso">زور Q Cafe</h2>
+          <p class="text-sm sm:text-base text-espresso/80 leading-relaxed">
+            <strong>حي الجامعة، الطريق الدائري، قبل كوبري الجامعة، ميت خميس وكفر الموجي، المنصورة، محافظة الدقهلية، مصر.</strong>
+          </p>
+
+          <div class="space-y-3 text-sm text-espresso/80">
+            <div class="flex items-center gap-3">
+              <i data-lucide="phone" class="w-4 h-4 text-bronze shrink-0"></i>
+              <span>واتساب والحجز: <strong dir="ltr">+201007450124</strong></span>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="map-pin" class="w-4 h-4 text-bronze shrink-0"></i>
+              <span>المنصورة، محافظة الدقهلية، مصر</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a href="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-3 text-xs font-bold text-gold hover:bg-chocolate transition">
+              <i data-lucide="map" class="w-4 h-4"></i>
+              <span>فتح في خرائط جوجل</span>
+            </a>
+            <a href="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-bronze/40 bg-cream px-5 py-3 text-xs font-bold text-espresso hover:border-gold transition">
+              <i data-lucide="navigation" class="w-4 h-4 text-bronze"></i>
+              <span>الاتجاهات</span>
+            </a>
+            <a href="https://wa.me/201007450124" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-bronze/40 bg-white px-5 py-3 text-xs font-bold text-espresso hover:border-gold transition">
+              <i data-lucide="message-circle" class="w-4 h-4 text-bronze"></i>
+              <span>تواصل واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="overflow-hidden rounded-3xl border border-bronze/25 bg-cream shadow-luxury">
+            <iframe
+              title="خريطة موقع Q Cafe في المنصورة"
+              src="https://maps.google.com/maps?q=Hay%20El%20Gamaa%20Ring%20Road%20Mansoura%20Egypt&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              class="w-full h-80 sm:h-96 border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+            <div class="p-4 sm:px-6 bg-espresso text-cream flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <span>رابط اللوكيشن: <span class="text-gold break-all" dir="ltr">https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6</span></span>
+              <a href="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" target="_blank" rel="noopener noreferrer" class="text-gold underline font-bold shrink-0">
+                افتح اللوكيشن ←
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- 11. الفوتر (FOOTER)                                                  -->
+  <!-- ===================================================================== -->
+  <footer class="bg-espresso text-cream border-t border-gold/20 pt-14 pb-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-gold/15">
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="48" cy="48" r="24" stroke="#C6A46A" stroke-width="5" />
+              <path d="M55 55L71 71" stroke="#C6A46A" stroke-width="5" stroke-linecap="round" />
+            </svg>
+            <span class="font-latin text-2xl font-semibold tracking-[0.14em] text-softwhite">Q CAFE</span>
+          </div>
+          <p class="text-sm text-gold font-latin" dir="ltr">More espresso Less depresso ❤</p>
+          <p class="text-xs text-cream/70 leading-relaxed">
+            حي الجامعة، الطريق الدائري، قبل كوبري الجامعة، ميت خميس وكفر الموجي، المنصورة، محافظة الدقهلية، مصر.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-gold mb-4">الأقسام</h4>
+          <ul class="space-y-2.5 text-sm text-cream/80">
+            <li><a href="#menu" class="hover:text-gold transition">المنيو التفاعلي</a></li>
+            <li><a href="#spotlight" class="hover:text-gold transition">الأكثر طلباً</a></li>
+            <li><a href="#offers" class="hover:text-gold transition">العروض والمميزات</a></li>
+            <li><a href="#reservations" class="hover:text-gold transition">حجز ترابيزة</a></li>
+            <li><a href="#location" class="hover:text-gold transition">العنوان والخريطة</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-gold mb-4">تواصل معانا</h4>
+          <ul class="space-y-2.5 text-sm text-cream/80">
+            <li><a href="https://wa.me/201007450124" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition">واتساب: <span dir="ltr">+201007450124</span></a></li>
+            <li><a href="https://maps.app.goo.gl/AwdK4Vu41pxcxQbf6" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition">لوكيشن خرائط جوجل</a></li>
+            <li class="text-xs text-cream/60 pt-1">حسابات السوشيال ميديا: مكان مخصص لحين إضافة الروابط الرسمية</li>
+          </ul>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold text-gold mb-4">المنيو والإعدادات</h4>
+          <button id="footer-qr-btn" type="button" class="w-full rounded-full border border-gold/35 px-4 py-2.5 text-xs font-bold text-cream hover:border-gold hover:text-gold transition">
+            كود QR ومشاركة المنيو
+          </button>
+          <button id="open-config-modal-btn" type="button" class="w-full rounded-full bg-chocolate border border-gold/25 px-4 py-2.5 text-xs font-bold text-gold hover:bg-gold hover:text-espresso transition">
+            عرض إعدادات البيانات القابلة للتعديل
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream/60">
+        <p>© <span id="year-span">2026</span> Q Cafe. جميع الحقوق محفوظة.</p>
+        <p>الأسعار والبيانات التجريبية قابلة للتعديل لحين اعتماد المنيو الرسمي للكافيه.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- 12. درج سلة الطلبات والطلب عبر واتساب                                -->
+  <!-- ===================================================================== -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="سلة الطلبات">
+    <div id="cart-backdrop" class="fixed inset-0 bg-espresso/70 backdrop-blur-xs"></div>
+    <aside class="fixed top-0 bottom-0 end-0 w-full max-w-md bg-softwhite text-espresso shadow-2xl flex flex-col z-10 border-s border-bronze/20">
+      <div class="flex items-center justify-between px-6 py-5 bg-espresso text-softwhite border-b border-gold/20">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-gold"></i>
+          <h3 class="font-serif text-2xl font-bold">سلة طلباتك</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="clear-cart-btn" type="button" class="rounded-full px-3 py-1 text-xs font-semibold text-cream/75 hover:bg-chocolate hover:text-gold transition">
+            تفريغ السلة
+          </button>
+          <button id="close-cart-btn" type="button" aria-label="إغلاق السلة" class="rounded-full p-2 text-cream/80 hover:bg-chocolate hover:text-gold transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+        <!-- يتم تعبئته ديناميكياً -->
+      </div>
+
+      <form id="cart-checkout-form" class="border-t border-bronze/20 bg-cream p-5 space-y-3.5 overflow-y-auto max-h-[58vh]">
+        <div>
+          <span class="block text-xs font-bold text-espresso mb-1.5">طريقة الاستلام</span>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center justify-center gap-2 rounded-xl border border-bronze/30 bg-white py-2.5 px-3 text-xs font-bold cursor-pointer has-[:checked]:bg-espresso has-[:checked]:text-gold has-[:checked]:border-espresso transition">
+              <input type="radio" name="fulfilment" value="استلام من الكافيه (Pickup)" checked class="sr-only" />
+              <i data-lucide="store" class="w-4 h-4"></i>
+              <span>استلام من الكافيه</span>
+            </label>
+            <label class="flex items-center justify-center gap-2 rounded-xl border border-bronze/30 bg-white py-2.5 px-3 text-xs font-bold cursor-pointer has-[:checked]:bg-espresso has-[:checked]:text-gold has-[:checked]:border-espresso transition">
+              <input type="radio" name="fulfilment" value="توصيل (Delivery)" class="sr-only" />
+              <i data-lucide="bike" class="w-4 h-4"></i>
+              <span>توصيل (حسب المنطقة)</span>
+            </label>
+          </div>
+          <p id="delivery-notice" class="hidden mt-1.5 text-[11px] text-bronze font-semibold">
+            التوصيل متاح فقط عندما يؤكد الكافيه توفر الخدمة لمنطقتك.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <input id="order-name" type="text" placeholder="اسمك (اختياري قبل الإرسال)" class="rounded-xl border border-bronze/25 bg-white px-3.5 py-2.5 text-xs text-espresso placeholder:text-espresso/45 focus:border-gold focus:outline-none" />
+          <input id="order-phone" type="tel" placeholder="رقم الموبايل (اختياري)" class="rounded-xl border border-bronze/25 bg-white px-3.5 py-2.5 text-xs text-espresso placeholder:text-espresso/45 focus:border-gold focus:outline-none" />
+        </div>
+
+        <div id="delivery-address-wrap" class="hidden">
+          <input id="order-address" type="text" placeholder="المنطقة والعنوان بالتفصيل في المنصورة (للتأكيد مع الكافيه)" class="w-full rounded-xl border border-bronze/25 bg-white px-3.5 py-2.5 text-xs text-espresso placeholder:text-espresso/45 focus:border-gold focus:outline-none" />
+        </div>
+
+        <input id="order-notes" type="text" placeholder="ملاحظات إضافية على الطلب (اختياري)" class="w-full rounded-xl border border-bronze/25 bg-white px-3.5 py-2.5 text-xs text-espresso placeholder:text-espresso/45 focus:border-gold focus:outline-none" />
+
+        <div class="pt-2 border-t border-bronze/20 space-y-1 text-sm">
+          <div class="flex justify-between text-espresso/75 text-xs">
+            <span>المجموع الفرعي (أسعار تجريبية)</span>
+            <span id="cart-subtotal">0 ج.م</span>
+          </div>
+          <div class="flex justify-between font-bold text-espresso text-base">
+            <span>الإجمالي التقديري</span>
+            <span id="cart-total" class="font-serif text-xl text-bronze">0 ج.م</span>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-espresso/70 leading-snug">
+          <strong>تنويه:</strong> الضغط على الزر يفتح واتساب بملخص طلبك، ولا يُعد الطلب مقبولاً أو مدفوعاً إلا بعد تأكيد Q Cafe مباشرة.
+        </p>
+
+        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-espresso py-3.5 px-5 text-xs sm:text-sm font-bold text-gold hover:bg-chocolate transition shadow-luxury">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>إرسال الطلب عبر واتساب</span>
+        </button>
+      </form>
+    </aside>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- 13. نوافذ QR والإعدادات                                               -->
+  <!-- ===================================================================== -->
+  <div id="qr-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="كود QR ومشاركة المنيو">
+    <div id="qr-backdrop" class="fixed inset-0 bg-espresso/75 backdrop-blur-xs"></div>
+    <div class="relative z-10 w-full max-w-md rounded-3xl bg-softwhite text-espresso p-6 sm:p-8 shadow-2xl border border-bronze/25">
+      <div class="flex items-center justify-between pb-4 border-b border-bronze/15">
+        <h3 class="font-serif text-2xl font-bold">رابط المنيو وكود QR</h3>
+        <button id="close-qr-modal" type="button" class="rounded-full p-2 hover:bg-cream transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="mt-4 text-sm text-espresso/75">
+        انسخ رابط المنيو أو امسح كود QR للوصول السريع للمنيو:
+      </p>
+      <div class="mt-3 flex items-center gap-2 rounded-xl bg-cream border border-bronze/25 p-2.5">
+        <input id="menu-url-input" type="text" readonly dir="ltr" class="w-full bg-transparent text-xs text-espresso font-mono focus:outline-none" />
+    
